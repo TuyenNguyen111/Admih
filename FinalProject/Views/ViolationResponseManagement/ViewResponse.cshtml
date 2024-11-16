@@ -1,0 +1,68 @@
+﻿@model FinalProject.ViewModels.Admin.ResponseListVM
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@{
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+
+<div class="col-lg-12 mt-4 mb-4" style="width: 100%;">
+    <div class="iq-edit-list-data">
+        <div class="tab-content">
+            <div class="tab-pane fade active show" id="personal-information" role="tabpanel">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title" style="text-align: center;">
+                            <h4 class="card-title">Chi tiết phản hồi</h4>
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(successMessage))
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @successMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+                    <div class="card-body">
+                        <form asp-controller="AdminHome" asp-action="AdminProfile" method="post" enctype="multipart/form-data">
+                            <div class="row align-items-center">
+                                <div class="form-group col-sm-6">
+                                    <label for="fullname" class="form-label">Họ và tên:</label>
+                                    <input readonly type="text" class="form-control" id="fullname" name="fullname" value="@Model.UserName" required placeholder="Enter your fullname" />
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="dob" class="form-label">Ngày phản hồi:</label>
+                                    <input readonly class="form-control" id="dob" name="dob"
+                                           value="@(Model.ResponseDate != DateTime.MinValue ? Model.ResponseDate.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"))"
+                                           type="date" required />
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="address" class="form-label">Địa chỉ bài viết:</label>
+                                    <input type="text" class="form-control" id="address" name="address" value="@Model.Address" readonly/>
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="feedbackName" class="form-label">Nội dung vi phạm:</label>
+                                    <input type="text" class="form-control" id="feedbackName" name="feedbackName" value="@Model.FeedbackName" readonly/>
+                                </div>
+                                <div class="form-group col-sm-12">
+                                    <label for="responseText" class="form-label">Nội dung phản hồi:</label>
+                                    <textarea readonly class="form-control" id="responseText" name="responseText">@Model.ResponseText</textarea>
+                                </div>
+
+                            </div>
+
+                            <div class="d-flex justify-content-end" style="margin-top: 20px;">
+                                <a href="@Url.Action("Approve", new { responseId = Model.ResponseId })" class="btn btn-primary" style="margin-right: 10px;">Duyệt</a>
+                                <a href="@Url.Action("Reject", new { responseId = Model.ResponseId })" class="btn btn-danger" style="margin-right: 10px;">Không duyệt</a>
+                                <button type="button" class="btn" style="background-color: #EAE7D6; color: black;" onclick="window.location.href='@Url.Action("Index", "ViolationResponseManagement")'">Hủy bỏ</button>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

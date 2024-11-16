@@ -1,0 +1,414 @@
+﻿@model FinalProject.ViewModels.UploadRoomPostVM
+
+@{
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+
+@{
+    ViewData["Title"] = "Favorite List";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/new.css">
+</head>
+
+@section BreadCum {
+    <div class="hero page-inner overlay"
+         style="background-image: url('@Url.Content("~/images/hero_bg_2.jpg")')">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-9 text-center mt-5">
+                    <h1 class="heading" data-aos="fade-up">
+                        Upload RoomPost
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+<div class="col-lg-12 mt-4 mb-4">
+    <div class="iq-edit-list-data">
+        <div class="tab-content">
+            <div class="tab-pane fade active show" id="personal-information" role="tabpanel">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h4 class="card-title">Upload RoomPost</h4>
+                        </div>
+                    </div>
+                    @if (TempData["SuccessMessage"] != null)
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @TempData["SuccessMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    @if (TempData["FailMessage"] != null)
+                    {
+                        <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                            @TempData["FailMessage"]
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+
+                    <div class="card-body">
+                        <form asp-controller="RoomPost" asp-action="UploadRoomPost" method="post" enctype="multipart/form-data">
+                            @Html.AntiForgeryToken()
+                            <div class="row">
+                                <div class="form-group col-sm-12">
+                                    <div class="row">
+                                        <div class="form-group col-sm-6">
+                                            <label for="fullname" class="form-label">Họ và tên:</label>
+                                            <input type="text" class="form-control" id="fullname" name="fullname" value="@Model.Users.fullname" readonly placeholder="Họ và tên" />
+                                        </div>
+
+                                        <div class="form-group col-sm-6">
+                                            <label for="email" class="form-label">Email:</label>
+                                            <input type="email" class="form-control" id="email" name="email" value="@Model.Users.email" readonly placeholder="Email" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-sm-6">
+                                    <label asp-for="RoomPostContentVM.Quantity" class="form-label">Số người ở:</label>
+                                    <input type="number" class="form-control" id="numberOfPeople" asp-for="RoomPostContentVM.Quantity" placeholder="Nhập số lượng người ở" min="1" max="4" value="" />
+                                    <span asp-validation-for="RoomPostContentVM.Quantity" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group col-sm-6">
+                                    <label asp-for="RoomPostContentVM.RoomPrice" class="form-label">Giá phòng/Tháng:</label>
+                                    <div class="input-group">
+                                        <input type="text" class="form-control" id="roomPrice"
+                                               asp-for="RoomPostContentVM.RoomPrice"
+                                               name="RoomPostContentVM.RoomPrice"
+                                               oninput="formatCurrency(this)"
+                                               placeholder="Nhập giá phòng" value=""/>
+                                        <span class="input-group-text">VND</span>
+                                    </div>
+                                    <span asp-validation-for="RoomPostContentVM.RoomPrice" class="text-danger"></span>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-sm-6">
+                                    <label asp-for="RoomPostContentVM.RoomSize" class="form-label">Diện tích:</label>
+                                    <div class="input-group">
+                                        <input type="number" class="form-control" id="roomSize"
+                                               value=""
+                                               asp-for="RoomPostContentVM.RoomSize"
+                                               placeholder="Nhập diện tích" min="1" max="50"/>
+                                        <span class="input-group-text">m²</span>
+                                    </div>
+                                    <span asp-validation-for="RoomPostContentVM.RoomSize" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group col-sm-6">
+                                    <label asp-for="RoomPostContentVM.RoomTypeId" class="form-label">Loại phòng:</label>
+                                    <select class="form-control" id="RoomTypeId" asp-for="RoomPostContentVM.RoomTypeId" asp-items="@(new SelectList(Model.RoomTypes, "RoomTypeId", "TypeName"))">
+                                        <option value="">-- Chọn loại phòng --</option>
+                                    </select>
+                                    <span asp-validation-for="RoomPostContentVM.RoomTypeId" class="text-danger"></span>
+                                </div>
+
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-sm-12">
+                                    <div class="row">
+                                        <div class="form-group col-sm-6">
+                                            <label for="streetNumber" class="form-label">Số nhà:</label>
+                                            <input type="text" class="form-control" id="streetNumber" name="streetNumber"  placeholder="Nhập số nhà" />
+                                        </div>
+
+                                        <div class="form-group col-sm-6">
+                                            <label for="streetName" class="form-label">Tên đường:</label>
+                                            <input type="text" class="form-control" id="streetName" name="streetName"  placeholder="Nhập tên đường" />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-sm-12">
+                                    <label for="locationSelect" class="form-label">Quận/Phường:</label>
+                                    <select id="locationSelect" class="form-control choices" ></select>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-sm-12">
+                                    <label asp-for="RoomPostContentVM.RoomAddress" class="form-label">Địa chỉ:</label>
+                                    <input type="text" class="form-control" id="RoomAddress" asp-for="RoomPostContentVM.RoomAddress" required placeholder="Nhập địa chỉ" readonly />
+                                    <span asp-validation-for="RoomPostContentVM.RoomAddress" class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="form-group col-sm-12">
+                                    <label asp-for="RoomPostContentVM.RoomDescription" class="form-label">Mô tả:</label>
+                                    <textarea class="form-control" id="roomDescription" asp-for="RoomPostContentVM.RoomDescription" rows="4" placeholder="Nhập mô tả phòng"></textarea>
+                                    <span asp-validation-for="RoomPostContentVM.RoomDescription" class="text-danger"></span>
+                                </div>
+                            </div>
+
+                            <div class="row">
+                                <div class="form-group col-sm-12">
+                                    <label class="form-label">Tiện ích:</label>
+                                    <div class="form-check-group d-flex flex-wrap">
+                                        @if (Model.Utility != null)
+                                        {
+                                            foreach (var utility in Model.Utility)
+                                            {
+                                                <div class="form-check" style="width: 20%; text-align: center; margin-bottom: 10px;">
+                                                    <input type="checkbox"
+                                                           class="form-check-input"
+                                                           id="utility_@utility.utilityId"
+                                                           name="SelectedUtilities"
+                                                           value="@utility.utilityId"
+                                                    @(Model.SelectedUtilities != null && Model.SelectedUtilities.Contains(utility.utilityId) ? "checked" : "")>
+                                                    <label class="form-check-label" for="utility_@utility.utilityId">@utility.utilityName</label>
+                                                </div>
+                                            }
+                                        }
+                                        else
+                                        {
+                                            <div>No utilities available.</div>
+                                        }
+                                    </div>
+                                </div>
+                            </div>
+
+
+                            <div class="row">
+                                <div class="form-group col-sm-12">
+                                    <label for="imageUpload" class="form-label">Chọn ảnh:</label>
+                                    <div class="image-upload-container">
+                                        <label for="imageUpload" class="upload-label">
+                                            <i class="fa fa-camera"></i> Chọn ảnh
+                                        </label>
+                                        <input type="file" id="imageUpload" name="RoomImages" accept="image/*" multiple>
+                                        <div id="imagePreviewContainer"></div>
+                                    </div>
+                                    <span class="text-danger"></span>
+                                </div>
+                            </div>
+
+
+                            <div class="button-container" style="display: flex; justify-content: flex-end; align-items: center; margin-top: 20px;">
+                                <div style="display: flex;">
+                                    <button style="margin-right: 10px;" type="submit" class="btn btn-primary">Lưu Bài</button>
+                                    <button type="button" class="btn bg-soft-danger" onclick="window.location.href='@Url.Action("Index", "Home")'">Hủy bỏ</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    let selectedDistrict = '';
+
+    document.addEventListener('DOMContentLoaded', function () {
+        const locationSelect = document.getElementById('locationSelect');
+        const addressInput = document.getElementById('RoomAddress'); 
+
+        let districtsData = [];
+        let isDistrictsShown = true;
+
+        function renderDistrictOptions(districts) {
+            locationSelect.innerHTML = '';
+            const defaultOption = document.createElement('option');
+            defaultOption.textContent = 'Chọn quận';
+            defaultOption.value = '';
+            locationSelect.appendChild(defaultOption);
+
+            districts.forEach(district => {
+                const option = document.createElement('option');
+                option.value = district.id;
+                option.textContent = district.name;
+                locationSelect.appendChild(option);
+            });
+            isDistrictsShown = true;
+        }
+
+        function renderWardOptions(wards) {
+            locationSelect.innerHTML = '';
+
+            wards.forEach(ward => {
+                const option = document.createElement('option');
+                option.value = ward.id;
+                option.textContent = ward.name;
+                locationSelect.appendChild(option);
+            });
+
+            const backOption = document.createElement('option');
+            backOption.value = 'back';
+            backOption.textContent = 'Quay lại chọn quận';
+            locationSelect.insertBefore(backOption, locationSelect.firstChild);
+
+            isDistrictsShown = false;
+        }
+
+        function loadDistricts() {
+            fetch('https://localhost:7127/api/districts')
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    districtsData = data;
+                    renderDistrictOptions(data);
+                })
+                .catch(error => console.error('Error loading districts:', error));
+        }
+
+        function loadWards(districtId) {
+            fetch(`https://localhost:7127/api/districts/${districtId}/wards`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(data => {
+                    renderWardOptions(data);
+                })
+                .catch(error => console.error('Error loading wards:', error));
+        }
+
+        locationSelect.addEventListener('change', function () {
+            const selectedValue = locationSelect.value;
+
+            if (selectedValue === 'back') {
+                renderDistrictOptions(districtsData);
+            } else if (isDistrictsShown && selectedValue) {
+                const selectedDistrictOption = locationSelect.options[locationSelect.selectedIndex];
+                selectedDistrict = selectedDistrictOption.textContent;
+                loadWards(selectedValue);
+            } else if (!isDistrictsShown && selectedValue) {
+                const selectedWardOption = locationSelect.options[locationSelect.selectedIndex];
+                const streetNumber = document.getElementById('streetNumber').value;
+                const streetName = document.getElementById('streetName').value;
+
+                addressInput.value = `${streetNumber} ${streetName}, ${selectedWardOption.textContent}, ${selectedDistrict}`;
+            }
+        });
+
+
+        document.getElementById('streetNumber').addEventListener('input', updateAddress);
+        document.getElementById('streetName').addEventListener('input', updateAddress);
+
+        function updateAddress() {
+            const streetNumber = document.getElementById('streetNumber').value;
+            const streetName = document.getElementById('streetName').value;
+            addressInput.value = `${streetNumber} ${streetName}, ${selectedDistrict}`;
+        }
+
+        loadDistricts();
+    });
+
+    const imageInput = document.getElementById('imageUpload');
+    const imagePreviewContainer = document.getElementById('imagePreviewContainer');
+
+    imageInput.addEventListener('change', (event) => {
+        const files = event.target.files;
+
+        imagePreviewContainer.innerHTML = '';
+
+        Array.from(files).forEach((file, index) => {
+            const reader = new FileReader();
+
+            reader.onload = (e) => {
+                const previewDiv = document.createElement('div');
+                previewDiv.classList.add('image-preview');
+
+                const img = document.createElement('img');
+                img.src = e.target.result;
+                previewDiv.appendChild(img);
+
+                const deleteBtn = document.createElement('button');
+                deleteBtn.classList.add('delete-image');
+                deleteBtn.innerHTML = 'X';
+                deleteBtn.onclick = () => {
+
+                    previewDiv.remove();
+
+                    removeImage(file);
+                };
+                previewDiv.appendChild(deleteBtn);
+
+                imagePreviewContainer.appendChild(previewDiv);
+            };
+            reader.readAsDataURL(file);
+        });
+    });
+
+    function removeImage(file) {
+        const dataTransfer = new DataTransfer();
+        Array.from(imageInput.files).forEach(f => {
+            if (f !== file) {
+                dataTransfer.items.add(f); 
+            }
+        });
+        imageInput.files = dataTransfer.files; 
+    }
+
+    document.getElementById('roomPrice').addEventListener('input', function (e) {
+        let value = e.target.value.replace(/\D/g, '');
+        value = value.replace(/\B(?=(\d{3})+(?!\d))/g, '.');
+        e.target.value = value;
+
+        document.querySelector('form').addEventListener('submit', function () {
+            e.target.value = e.target.value.replace(/\D/g, '');
+        });
+    });
+
+
+    function formatCurrency(input) {
+        var value = input.value.replace(/\D/g, '');
+        value = value.replace(/(\d)(?=(\d{3})+(?!\d))/g, '$1.');
+        input.value = value;
+    }
+
+    function checkFields() {
+        const streetNumber = document.getElementById('streetNumber');
+        const streetName = document.getElementById('streetName');
+        const locationSelect = document.getElementById('locationSelect');
+
+        let missingFields = [];
+
+        if (!streetNumber.value) {
+            missingFields.push("Số nhà");
+        }
+        if (!streetName.value) {
+            missingFields.push("Tên đường");
+        }
+        if (!locationSelect.value) {
+            missingFields.push("Quận/Phường");
+        }
+
+        if (missingFields.length > 0) {
+            alert(`Vui lòng nhập ${missingFields.join(', ')}.`);
+        }
+    }
+
+    document.getElementById('streetNumber').addEventListener('blur', checkFields);
+    document.getElementById('streetName').addEventListener('blur', checkFields);
+    document.getElementById('locationSelect').addEventListener('blur', checkFields);
+
+</script>
+
+
+

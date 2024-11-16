@@ -1,0 +1,86 @@
+﻿@model IEnumerable<FinalProject.ViewModels.FavoriteListVM>
+@{
+    ViewData["Title"] = "Favorite List";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+@section BreadCum {
+    <div class="hero page-inner overlay"
+         style="background-image: url('@Url.Content("~/images/hero_bg_2.jpg")')">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-9 text-center mt-5">
+                    <h1 class="heading" data-aos="fade-up">Favorite List</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @if (TempData["FailMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["FailMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+        <div class="table-responsive">
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col">RoomPost</th>
+                        <th scope="col">Name</th>
+                        <th scope="col">Price</th>
+                        <th scope="col">Size</th>
+                        <th scope="col">Address</th>
+                        <th scope="col">Handle</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @foreach (var item in Model)
+                    {
+                        <tr>
+                            <th scope="row">
+                                <div class="d-flex align-items-center">
+                                    <img src="~/img/Room/@item.RoomImage" class="img-fluid me-5 rounded-circle" style="width: 80px; height: 80px;" alt="@item.RoomName">
+                                </div>
+                            </th>
+                            <td>
+                                <a asp-action="Detail" asp-controller="RoomPost" asp-route-id="@item.PostId">
+                                    <p class="mb-0 mt-4">@item.RoomName</p>
+                                </a>
+                            </td>
+                            <td>
+                                <p class="mb-0 mt-4">@item.RoomPrice.ToString("N0") ₫</p>
+                            </td>
+                            <td>
+                                <p class="mb-0 mt-4">@item.RoomSize</p>
+                            </td>
+                            <td>
+                                <p class="mb-0 mt-4">@item.RoomAddress</p>
+                            </td>
+                            <td>
+                                <form asp-action="@(User.Identity.IsAuthenticated ? "DeleteFavoriteItemAuthenticated" : "DeleteFavoriteItemAnonymous")"
+                                      asp-controller="FavoriteList" method="post">
+                                    <input type="hidden" name="idPhong" value="@item.PostId" />
+                                    <button type="submit" class="btn btn-md rounded-circle bg-light border mt-4">
+                                        <i class="fa fa-times text-danger"></i>
+                                    </button>
+                                </form>
+                            </td>
+
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>

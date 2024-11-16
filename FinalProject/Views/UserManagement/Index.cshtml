@@ -1,0 +1,167 @@
+﻿ @using FinalProject.ViewModels.Admin
+ @model PagedListVM<FinalProject.ViewModels.Admin.UserManagementVM>
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="col-lg-12 mt-4 mb-4" style="width: 100%;">
+    <div class="iq-edit-list-data">
+        <div class="tab-content">
+            <div class="d-flex justify-content-between mb-3">
+                <a href="@Url.Action("Create", "UserManagement")" class="btn btn-primary me-2" style="background-color: #005555; color: white; padding: 8px 15px; display: flex; align-items: center; justify-content: center;">
+                    Thêm mới
+                </a>
+
+                <form class="d-flex" action="@Url.Action("FilterByTypeName")" method="get">
+                    <select name="userTypeId" class="form-control" style="width: 200px; border-radius: 20px; margin-right: 10px;">
+                        <option value ="">Chọn loại người dùng</option>
+                        @foreach (var userType in ViewBag.UserTypes)
+                        {
+                            <option value="@userType.UserTypeId">@userType.TypeName</option>
+                        }
+                    </select>
+                    <button type="submit" class="btn btn-primary me-2" style="background-color: #005555; color: white; padding: 8px 15px;">
+                        Lọc
+                    </button>
+                </form>
+                
+                <form class="d-flex" action="@Url.Action("Search", "UserManagement")" method="get">
+                    <input type="text" name="searchQuery" class="form-control" placeholder="Tìm kiếm..."  style="width: 450px; border-radius: 20px;">
+                    <button type="submit" class="btn btn-primary me-2" style="background-color: #005555; color: white; margin-left: 10px; padding: 8px 15px;">
+                        Tìm kiếm
+                    </button>
+                </form>
+
+                <a href="@Url.Action("Index", "UserManagement")" style=" background-color: #EAE7D6;color: black;" class="btn btn-secondary">Hủy bỏ</a>
+            </div>
+
+            <div class="tab-pane fade active show" id="personal-information" role="tabpanel">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-center align-items-center" style="height: 50px;">
+                        <div class="header-title">
+                            <h4 class="card-title">Danh sách người dùng</h4>
+                        </div>
+                    </div>
+
+                    <div>
+                        @if (TempData["SuccessMessage"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                @TempData["SuccessMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                        @if (TempData["FailMessage"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                @TempData["FailMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                        @if (Model == null)
+                        {
+                            <div class="alert alert-info text-center" style="background-color: white; border-color: white; padding-bottom: 0px;">
+                                <i class="fa fa-database" style="font-size: 30px; margin-right: 10px;"></i>
+                                <span>Không có người dùng</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover" style="margin-bottom: 0px;">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="text-center">STT</th>
+                                            <th scope="col" class="text-center">Tên đăng nhập</th>
+                                            <th scope="col" class="text-center">Họ tên</th>
+                                            <th scope="col" class="text-center">Email</th>
+                                            <th scope="col" class="text-center">Số điện thoại</th>
+                                            <th scope="col" class="text-center">Ngày sinh</th>
+                                            <th scope="col" class="text-center">Loại người dùng</th>
+                                            <th scope="col" class="text-center">Trạng thái tài khoản</th>
+                                            <th scope="col" class="text-center">Xử lý</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var user in Model.Items)
+                                        {
+                                            <tr>
+                                                <td class="text-center">@((Model.PageNumber - 1) * Model.PageSize + Model.Items.ToList().IndexOf(user) + 1)</td>
+                                                <td class="text-center">@user.Username</td>
+                                                <td class="text-center">@user.Fullname</td>
+                                                <td class="text-center">@user.Email</td>
+                                                <td class="text-center">@user.Phone</td>
+                                                <td>@user.Dob?.ToString("dd/MM/yyyy")</td>
+                                                <td class="text-center">@user.TypeName</td>
+
+                                                <td class="text-center">
+                                                    @if (user.IsValid)
+                                                    {
+                                                        <span style="color: green;">Đang hoạt động</span>
+                                                    }
+                                                    else
+                                                    {
+                                                        <span style="color: red;">Không hoạt động</span>
+                                                    }
+                                                </td>
+
+
+                                                <td class="text-center">
+                                                   @*  <a asp-action="Edit" asp-route-id="@user.UserId" class="btn btn-warning">Chỉnh sửa</a>
+                                                    <a asp-action="Delete" asp-route-id="@user.UserId" class="btn btn-danger" onclick="return confirm('Bạn có chắc muốn xóa?');">Xóa</a> *@
+                                                      <a href="@Url.Action("Edit", new { id = user.UserId })" class="btn btn-sm" style="background-color: #3CB371; color: white; border-radius: 20px; padding: 8px 15px; margin-right: 5px;">
+                                                          <i class="fa fa-edit"></i> Sửa
+                                                      </a>
+                                                      <a href="@Url.Action("Delete", new { id = user.UserId })" class="btn btn-sm" style="background-color: #d9534f; color: white; border-radius: 20px; padding: 8px 15px;" title="Delete" onclick="return confirmDelete()">
+                                                          <i class="fa fa-trash"></i> Xóa
+                                                      </a>
+                                                </td>
+
+                                            </tr>
+                                        }
+                                    </tbody>    
+                                </table>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<nav>
+    <ul class="pagination justify-content-center">
+        @if (Model.PageNumber > 1)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PageNumber - 1, pageSize = Model.PageSize })">Trước</a>
+            </li>
+        }
+
+        @for (int i = 1; i <= Model.TotalPages; i++)
+        {
+            <li class="page-item @(i == Model.PageNumber ? "active" : "")">
+                <a class="page-link" href="@Url.Action("Index", new { pageNumber = i, pageSize = Model.PageSize })">
+                    @i
+                </a>
+            </li>
+        }
+
+        @if (Model.PageNumber < Model.TotalPages)
+        {
+            <li class="page-item">
+                <a class="page-link" href="@Url.Action("Index", new { pageNumber = Model.PageNumber + 1, pageSize = Model.PageSize })">Tiếp theo</a>
+            </li>
+        }
+    </ul>
+</nav>
+
+
+<script>
+    function confirmDelete() {
+        return confirm("Bạn có chắc chắn muốn xóa người dùng này không?");
+    }
+</script>

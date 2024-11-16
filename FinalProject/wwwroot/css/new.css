@@ -1,0 +1,109 @@
+﻿.image-upload-container {
+    border: 1px dashed #ccc;
+    padding: 10px;
+    text-align: center;
+}
+
+.upload-label {
+    display: inline-block;
+    cursor: pointer;
+    color: #005555;
+    font-size: 18px;
+    margin-bottom: 10px;
+}
+
+#imagePreviewContainer {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+    justify-content: center;
+}
+
+.image-preview {
+    position: relative;
+    width: 100px;
+    height: 100px;
+}
+
+.image-preview img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+}
+
+.delete-image {
+    position: absolute;
+    top: 5px;
+    right: 5px;
+    background: rgba(0, 0, 0, 0.5);
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    padding: 2px 5px;
+}
+
+.form-check-group {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 10px;
+}
+
+.form-check {
+    display: flex;
+    align-items: center;
+    margin-right: 10px;
+}
+
+.utilities-container {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 15px;
+    padding: 15px;
+    border-radius: 5px;
+    justify-content: unset; 
+}
+
+.utility-item {
+    display: flex;
+    width: calc(20% - 10px); 
+    text-align: center;
+    padding: 8px;
+    text-align: center;
+}
+
+.utility-item label {
+    margin-left: 5px; 
+}
+
+.utility-item:hover {
+    background-color: rgba(0, 0, 0, 0.05); 
+}
+
+/* Thêm không gian cho form */
+.form-group {
+margin-bottom: 20px; /* Thêm khoảng cách dưới mỗi field */
+}
+
+.form-group label {
+    margin-bottom: 8px; /* Thêm khoảng cách giữa label và input */
+}
+
+.form-buttons {
+    display: flex; /* Sử dụng Flexbox để căn chỉnh các nút */
+    justify-content: flex-end; /* Căn chỉnh các nút sang phía phải */
+    gap: 10px; /* Thêm khoảng cách giữa 2 nút */
+    margin-top: 20px; /* Thêm khoảng cách trên nút */
+    margin-bottom: 30px;
+}
+
+.btn {
+    padding: 8px 15px; /* Cải thiện độ rộng và chiều cao của các nút */
+    border-radius: 20px; /* Tạo bo tròn cho nút */
+}
+
+.btn-secondary {
+    background-color: #EAE7D6;
+    color: black;
+}
+

@@ -1,0 +1,66 @@
+﻿@using FinalProject.Data;
+@{
+    ViewData["Title"] = "Index";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+    var postID = ViewBag.PostID;
+
+    List<Feedback> lst = ViewBag.Feedbacks;
+}
+
+@section BreadCum {
+    <div class="hero page-inner overlay"
+         style="background-image: url('@Url.Content("~/images/hero_bg_1.jpg")')">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-9 text-center mt-5">
+                    <h1 class="heading" data-aos="fade-up">Report Violations</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="section">
+    <div class="container">
+
+        <form asp-action="Report" asp-controller="RoomFeedback" method="post" class="border py-4 px-4 bg-light" style="max-width: 600px; margin: auto;">
+            <h2 class="text-center mb-4">Báo cáo vi phạm</h2>
+            <input type="hidden" name="postID" value="@postID" />
+
+            <div class="d-flex justify-content-between mb-3">
+                <div class="w-50 pe-2" style="margin-left:50px;">
+                    <label class="form-label">Chọn loại vi phạm:</label>
+                    @foreach (var item in lst.Take((lst.Count + 1) / 2))
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="feedbackType_@item.FeedbackId" name="selectedFeedbackType" value="@item.FeedbackId">
+                            <label class="form-check-label" for="feedbackType_@item.FeedbackId">
+                                @item.FeedbackName
+                            </label>
+                        </div>
+                    }
+                </div>
+                <div class="w-50 ps-2" style="margin-top:1.75rem">
+                    @foreach (var item in lst.Skip((lst.Count + 1) / 2))
+                    {
+                        <div class="form-check">
+                            <input class="form-check-input" type="radio" id="feedbackType_@item.FeedbackId" name="selectedFeedbackType" value="@item.FeedbackId">
+                            <label class="form-check-label" for="feedbackType_@item.FeedbackId">
+                                @item.FeedbackName
+                            </label>
+                        </div>
+                    }
+                </div>
+            </div>
+
+            <div class="text-end">
+                <button type="submit" class="btn btn-primary">Gửi</button>
+            </div>
+        </form>
+
+
+
+
+    </div>
+</div>
+

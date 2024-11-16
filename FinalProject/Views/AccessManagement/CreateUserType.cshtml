@@ -1,0 +1,56 @@
+﻿@model FinalProject.ViewModels.Admin.UserTypeVM
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<head>
+    <link rel="stylesheet" href="~/css/new.css" />
+</head>
+
+<div class="col-lg-12 mt-4 mb-4" style="width: 100%;">
+    <div class="iq-edit-list-data">
+        <div class="tab-content">
+            <div class="tab-pane fade active show" id="personal-information" role="tabpanel" style="margin-top: 50px;">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-center align-items-center" style="height: 50px;">
+                        <div class="header-title">
+                            <h4 class="card-title">Thêm mới nhóm người dùng</h4>
+                        </div>
+                    </div>
+
+                    <div>
+                        @if (TempData["SuccessMessage"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                @TempData["SuccessMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                        @if (TempData["FailMessage"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                @TempData["FailMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                        <form method="post" action="@Url.Action("CreateUserType", "AccessManagement")">
+                            <div class="form-group">
+                                <label style="margin-top:30px" for="userTypeName">Tên nhóm người dùng:</label>
+                                <input type="text" id="userTypeName" name="UserTypeName" class="form-control" value="@Model.UserTypeName"/>
+                                @Html.ValidationMessageFor(model => model.UserTypeName, "", new { @class = "text-danger" })
+                            </div>
+
+                            <div class="form-buttons d-flex justify-content-end mt-4">
+                                <button type="submit" class="btn btn-primary me-2">Thêm mới</button>
+                                <a href="@Url.Action("UserTypeManagement", "AccessManagement")" style="margin-right:20px" class="btn btn-secondary">Hủy bỏ</a>
+                            </div>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

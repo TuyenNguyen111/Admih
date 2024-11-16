@@ -1,0 +1,117 @@
+﻿@using System.Security.Claims
+@model FinalProject.ViewModels.RoomListVM
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+@{
+    ViewData["Title"] = "Properties";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+@section BreadCum {
+    <div class="hero page-inner overlay"
+         style="background-image: url('@Url.Content("~/images/hero_bg_1.jpg")')">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-9 text-center mt-5">
+                    <h1 class="heading" data-aos="fade-up">Properties</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="section">
+    <div class="container">
+        <div class="row mb-5 align-items-center">
+            <div class="col-lg-6 text-center mx-auto">
+                <h2 class="font-weight-bold text-primary heading">
+                    Featured Properties
+                </h2>
+            </div>
+        </div>
+        @await Html.PartialAsync("~/Views/Shared/_SliderPartial.cshtml")
+    </div>
+</div>
+
+<div class="section section-properties">
+    <div class="container">
+        <div class="row">
+            @if (Model.Rooms == null || !Model.Rooms.Any())
+            {
+                <p>No data available.</p>
+            }
+            else
+            {
+                @foreach (var post in Model.Rooms)
+                {
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                        <div class="property-item mb-30">
+                            <a asp-controller="RoomPost" asp-action="Detail" asp-route-id="@post.PostId" class="img">
+                                <img src="~/img/Room/@post.RoomImage" alt="@post.RoomName" class="img-fluid" />
+                            </a>
+
+                            <div class="property-content">
+                                <div class="price mb-2"><span>@post.RoomPrice.ToString("N0") ₫</span></div>
+                                <div>
+                                    <span class="d-block mb-2 text-black-50">@post.RoomType</span>
+                                    <span class="city d-block mb-3">@post.RoomAddress</span>
+
+                                    <div class="specs d-flex mb-4">
+                                        <span class="d-block d-flex align-items-center me-3">
+                                            <span class="fas fa-user me-2"></span>
+                                            <span class="caption">@post.Quantity people</span>
+                                        </span>
+                                        <span class="d-block d-flex align-items-center">
+                                            <span class="fas fa-ruler-horizontal me-2"></span>
+                                            <span class="caption">@post.RoomSize m²</span>
+                                        </span>
+                                    </div>
+
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <div class="d-flex gap-2">
+                                            <a asp-controller="RoomPost" asp-action="Detail" asp-route-id="@post.PostId"
+                                               class="btn btn-primary py-2 px-3">See details</a>
+                                            <a asp-controller="FavoriteList" asp-action="AddToFavoriteAuthenticated" asp-route-id="@post.PostId"
+                                               class="btn btn-primary py-2 px-3">Add Favorite</a>
+
+                                            @if (User.FindFirstValue(ClaimTypes.NameIdentifier) != post.UserId.ToString())
+                                            {
+                                                <a asp-controller="RoomFeedback" asp-action="Index" asp-route-postID="@post.PostId"
+                                                   style="margin-left:25px" class="btn btn-danger py-2 px-3">Report</a>
+                                            }
+                                        </div>
+                                    }
+                                    else
+                                    {
+                                        <div class="d-flex gap-2">
+                                            <a asp-controller="RoomPost" asp-action="Detail" asp-route-id="@post.PostId"
+                                               class="btn btn-primary py-2 px-3">See details</a>
+                                            <a asp-controller="FavoriteList" asp-action="AddToFavoriteAnonymous" asp-route-id="@post.PostId"
+                                               class="btn btn-primary py-2 px-3">Add Favorite</a>
+                                        </div>
+                                    }
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            }
+
+            <div class="row align-items-center py-5">
+                <div class="col-lg-3">Pagination (@Model.CurrentPage of @Model.TotalPages)</div>
+                <div class="col-lg-6 text-center">
+                    <div class="custom-pagination">
+                        @for (int i = 1; i <= Model.TotalPages; i++)
+                        {
+                            <a asp-action="Index" asp-route-page="@i" class="@(i == Model.CurrentPage ? "active" : "")">
+                                @i
+                            </a>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

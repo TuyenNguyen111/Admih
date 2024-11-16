@@ -1,0 +1,78 @@
+﻿@model IEnumerable<FinalProject.ViewModels.Admin.ResponseListVM>
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="col-lg-12 mt-4 mb-4" style="width: 100%;">
+    <div class="iq-edit-list-data">
+        <div class="tab-content">
+            <div class="tab-pane fade active show" id="personal-information" role="tabpanel">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title w-100 text-center">
+                            <h4 class="card-title">Danh sách các phản hồi vi phạm</h4>
+                        </div>
+                    </div>
+                    <div>
+                        @if (TempData["SuccessMessage"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                @TempData["SuccessMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                        @if (TempData["FailMessage"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                @TempData["FailMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                        @if (!Model.Any())
+                        {
+                            <div class="alert alert-info text-center" style="background-color: white; border-color: white; padding-bottom: 0px;">
+                                <i class="fa fa-database" style="font-size: 30px; margin-right: 10px;"></i>
+                                <span>Không có phản hồi</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover" style="margin-bottom: 0px;">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="text-center">STT</th>
+                                            <th scope="col" class="text-center">Người phản hồi</th>
+                                            <th scope="col" class="text-center">Nội dung vi phạm</th>
+                                            <th scope="col" class="text-center">Địa chỉ bài viết</th>
+                                            <th scope="col" class="text-center">Xử lý</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td class="text-center">@(@Model.ToList().IndexOf(item) + 1)</td>
+                                                <td class="text-center">@item.UserName</td>
+                                                <td class="text-center">@item.FeedbackName</td>
+                                                <td class="text-center">@item.Address</td>
+                                                <td class="text-center">
+                                                    <a href="@Url.Action("ViewResponse", new { responseId = item.ResponseId })" class="btn btn-sm" style="background-color: #005555; color: white; border-radius: 20px; padding: 8px 15px;">
+                                                        <i class="fa fa-eye"></i> Xem chi tiết
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

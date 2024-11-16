@@ -1,0 +1,83 @@
+﻿@model FinalProject.ViewModels.SendResponseVM
+@{
+    ViewData["Title"] = "Favorite List";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+
+@section BreadCum {
+    <div class="hero page-inner overlay"
+         style="background-image: url('@Url.Content("~/images/hero_bg_2.jpg")')">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-9 text-center mt-5">
+                    <h1 class="heading" data-aos="fade-up">Phản Hồi Vi Phạm</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="container-fluid py-5">
+    <div class="container py-5">
+        @if (TempData["SuccessMessage"] != null)
+        {
+            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                @TempData["SuccessMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        @if (TempData["FailMessage"] != null)
+        {
+            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                @TempData["FailMessage"]
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        }
+
+        <div class="border p-4 rounded">
+            <h2 class="text-center mb-4">Phản Hồi Vi Phạm</h2>
+            <form asp-action="SendResponse" asp-controller="RoomFeedback" method="post">
+                <input type="hidden" asp-for="PostId" class="form-control" />
+                <input type="hidden" asp-for="FeedbackId" class="form-control" />
+
+                <div class="row">
+                    <div class="row mb-3">
+                        <div class="col-6">
+                            <label class="form-label">Bài viết tại địa chỉ:</label>
+                            <input type="text"
+                                   class="form-control"
+                                   asp-for="Address"
+                                   value="@Model.Address"
+                                   readonly />
+                        </div>
+                        <div class="col-6">
+                            <label class="form-label">Nội dung vi phạm:</label>
+                            <input type="text"
+                                   class="form-control"
+                                   asp-for="FeedbackName"
+                                   value="@Model.FeedbackName"
+                                   readonly />
+                        </div>
+                    </div>
+
+                    <div class="col-12 mb-3">
+                        <label asp-for="ResponseText" class="form-label">Nội dung phản hồi:</label>
+                        <textarea asp-for="ResponseText"
+                                  cols="29"
+                                  rows="7"
+                                  class="form-control"
+                                  placeholder="Nhập vào nội dung phản hồi"
+                                  required></textarea>
+                    </div>
+
+                    <div class="col-12 text-center">
+                        <button style="margin-right: 10px;" type="submit" class="btn btn-primary">Gửi phản hồi</button>
+                        <button type="button" class="btn bg-soft-danger" onclick="window.location.href='@Url.Action("Index", "Home")'">Hủy bỏ</button>
+                    </div>
+                </div>
+            </form>
+
+        </div>
+    </div>
+</div>

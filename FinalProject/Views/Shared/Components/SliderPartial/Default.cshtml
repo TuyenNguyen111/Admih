@@ -1,0 +1,58 @@
+﻿@model IEnumerable<FinalProject.ViewModels.RoomPostVM>
+
+<div class="row">
+    <div class="col-12">
+        <div class="property-slider-wrap">
+            <div class="property-slider">
+                @foreach (var post in Model)
+                {
+                    <div class="col-xs-12 col-sm-6 col-md-6 col-lg-4">
+                        <div class="property-item mb-30">
+                            <a asp-controller="RoomPost" asp-action="Detail" asp-route-id="@post.PostId" class="img">
+                                <img src="~/img/Room/@post.RoomImage" alt="@post.RoomName" class="img-fluid" />
+                            </a>
+
+                            <div class="property-content">
+                                <div class="price mb-2"><span>@post.RoomPrice.ToString("N0") ₫</span></div>
+                                <div>
+                                    <span class="d-block mb-2 text-black-50">@post.RoomType</span>
+                                    <span class="city d-block mb-3">@post.RoomAddress</span>
+
+                                    <div class="specs d-flex mb-4">
+                                        <span class="d-block d-flex align-items-center me-3">
+                                            <span class="fas fa-user me-2"></span>
+                                            <span class="caption">@post.Quantity people</span>
+                                        </span>
+                                        <span class="d-block d-flex align-items-center">
+                                            <span class="fas fa-ruler-horizontal me-2"></span>
+                                            <span class="caption">@post.RoomSize m²</span>
+                                        </span>
+                                    </div>
+
+                                    <a asp-controller="RoomPost" asp-action="Detail" asp-route-id="@post.PostId"
+                                       class="btn btn-primary py-2 px-3">See details</a>
+                                    @if (User.Identity.IsAuthenticated)
+                                    {
+                                        <a asp-controller="FavoriteList" asp-action="AddToFavoriteAuthenticated" asp-route-id="@post.PostId"
+                                           style="margin-left: 30px;" class="btn btn-primary py-2 px-3">Add Favorite</a>
+                                    }
+                                    else
+                                    {
+                                        <a asp-controller="FavoriteList" asp-action="AddToFavoriteAnonymous" asp-route-id="@post.PostId"
+                                           style="margin-left: 30px;" class="btn btn-primary py-2 px-3">Add Favorite</a>
+                                    }
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                }
+            </div>
+
+            <div id="property-nav" class="controls" tabindex="0" aria-label="Carousel Navigation">
+                <span class="prev" data-controls="prev" aria-controls="property" tabindex="-1">Prev</span>
+                <span class="next" data-controls="next" aria-controls="property" tabindex="-1">Next</span>
+            </div>
+        </div>
+    </div>
+</div>

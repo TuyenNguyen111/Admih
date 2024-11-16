@@ -1,0 +1,158 @@
+﻿@model FinalProject.ViewModels.UpdatePersonalInformationVM
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+@{
+    var successMessage = TempData["SuccessMessage"] as string;
+}
+
+<style>
+    .profile-pic {
+        max-width: 100%;
+        width: 150px;
+        height: 150px;
+        display: block;
+        border-radius: 50%;
+        border: 2px solid #ccc;
+    }
+
+    .profile-img-edit {
+        position: relative;
+        display: inline-block;
+        height: 150px;
+        width: 150px;
+    }
+
+    .file-upload {
+        display: none;
+    }
+
+    .p-image {
+        position: absolute;
+        top: 110px;
+        right: 10px;
+        background: #005555;
+        color: #fff;
+        border-radius: 50%;
+        height: 30px;
+        width: 30px;
+        line-height: 30px;
+        text-align: center;
+        font-size: 16px;
+        cursor: pointer;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+    }
+
+    .upload-button {
+        font-size: 1.2em;
+    }
+
+</style>
+
+<div class="col-lg-12 mt-4 mb-4" style="width: 100%;">
+    <div class="iq-edit-list-data">
+        <div class="tab-content">
+            <div class="tab-pane fade active show" id="personal-information" role="tabpanel">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-between">
+                        <div class="header-title">
+                            <h4 class="card-title">Thông tin cá nhân</h4>
+                        </div>
+                    </div>
+                    @if (!string.IsNullOrEmpty(successMessage))
+                    {
+                        <div class="alert alert-success alert-dismissible fade show" role="alert">
+                            @successMessage
+                            <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                        </div>
+                    }
+                    <div class="card-body">
+                        <form asp-controller="AdminHome" asp-action="AdminProfile" method="post" enctype="multipart/form-data">
+                            <div class="form-group row align-items-center">
+                                <div class="col-md-12">
+                                    <div class="profile-img-edit">
+                                        <img class="profile-pic" src="@Model.userimage" alt="@Model.fullname">
+                                        <div class="p-image">
+                                            <i class="ri-pencil-line upload-button text-white"></i>
+                                            <input class="file-upload" type="file" accept="image/*" name="userimage" />
+                                        </div>
+                                    </div>
+                                    @Html.ValidationMessageFor(model => model.userimage, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="form-group col-sm-6">
+                                <label class="form-label d-block">Giới tính:</label>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="inlineRadio10" value="false" @(Model.gender == false ? "checked" : "") />
+                                    <label class="form-check-label" for="inlineRadio10"> Nam</label>
+                                </div>
+                                <div class="form-check form-check-inline">
+                                    <input class="form-check-input" type="radio" name="gender" id="inlineRadio11" value="true" @(Model.gender == true ? "checked" : "") />
+                                    <label class="form-check-label" for="inlineRadio11"> Nữ</label>
+                                </div>
+                                @Html.ValidationMessageFor(model => model.gender, "", new { @class = "text-danger" })
+                            </div>
+                            <div class="row align-items-center">
+                                <div class="form-group col-sm-6">
+                                    <label for="fullname" class="form-label">Họ và tên:</label>
+                                    <input type="text" class="form-control" id="fullname" name="fullname" value="@Model.fullname" required placeholder="Enter your fullname" />
+                                    @Html.ValidationMessageFor(model => model.fullname, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="dob" class="form-label">Ngày sinh:</label>
+                                    <input class="form-control" id="dob" name="dob"
+                                           value="@(Model.dob.HasValue ? Model.dob.Value.ToString("yyyy-MM-dd") : DateTime.Now.ToString("yyyy-MM-dd"))"
+                                           type="date" required />
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="phone" class="form-label">Số điện thoại:</label>
+                                    <input type="tel" class="form-control" id="phone" name="phone" value="@Model.phone" required placeholder="Enter your phone" />
+                                    @Html.ValidationMessageFor(model => model.phone, "", new { @class = "text-danger" })
+                                </div>
+                                <div class="form-group col-sm-6">
+                                    <label for="email" class="form-label">Email:</label>
+                                    <input type="email" class="form-control" id="email" name="email" value="@Model.email" required placeholder="Enter your email" />
+                                    @Html.ValidationMessageFor(model => model.email, "", new { @class = "text-danger" })
+                                </div>
+                            </div>
+                            <div class="button-container" style="display: flex; justify-content: space-between; align-items: center; margin-top: 20px;">
+                                <button type="button" class="btn btn-primary" onclick="window.location.href='@Url.Action("AdminChangePassword", "AdminHome")'">
+                                    Đổi mật khẩu
+                                </button>
+
+                                <div style="display: flex;">
+                                    <button style="margin-right: 10px;" type="submit" class="btn btn-primary">Xác nhận</button>
+                                    <button type="button" class="btn bg-soft-danger" onclick="window.location.href='@Url.Action("Index", "AdminHome")'">Hủy bỏ</button>
+                                </div>
+                            </div>
+
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.addEventListener('DOMContentLoaded', function () {
+        document.querySelector('.upload-button').addEventListener('click', function () {
+            document.querySelector('.file-upload').click();
+        });
+
+        document.querySelector('.file-upload').addEventListener('change', function (event) {
+            const file = event.target.files[0];
+            if (file) {
+                const reader = new FileReader();
+                reader.onload = function (e) {
+                    document.querySelector('.profile-pic').src = e.target.result;
+                }
+                reader.readAsDataURL(file);
+            }
+        });
+    });
+</script>

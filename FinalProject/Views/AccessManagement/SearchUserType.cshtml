@@ -1,0 +1,99 @@
+﻿@model IEnumerable<FinalProject.ViewModels.Admin.UserTypeVM>
+
+@{
+    Layout = "~/Views/Shared/_LayoutAdmin.cshtml";
+}
+
+<div class="col-lg-12 mt-4 mb-4" style="width: 100%;">
+    <div class="iq-edit-list-data">
+        <div class="tab-content">
+            <div class="d-flex justify-content-between mb-3">
+                <a href="@Url.Action("CreateUserType")" class="btn btn-primary me-2" style="background-color: #005555; color: white; padding: 8px 15px; display: flex; align-items: center; justify-content: center;">
+                    Thêm mới
+                </a>
+
+
+                <form class="d-flex" action="@Url.Action("SearchUserType")" method="get">
+                    <input type="text" name="searchQuery" class="form-control" placeholder="Tìm kiếm..." style="width: 450px; border-radius: 20px;">
+                    <button type="submit" class="btn btn-primary me-2" style="background-color: #005555; color: white; margin-left: 10px; padding: 8px 15px;">
+                        Tìm kiếm
+                    </button>
+                    <a href="@Url.Action("UserTypeManagement", "AccessManagement")" style=" background-color: #EAE7D6;color: black;" class="btn btn-secondary">Hủy bỏ</a>
+                </form>
+            </div>
+            <div class="tab-pane fade active show" id="personal-information" role="tabpanel" style="margin-top: 50px;">
+                <div class="card">
+                    <div class="card-header d-flex justify-content-center align-items-center" style="height: 50px;">
+                        <div class="header-title">
+                            <h4 class="card-title">Danh sách các nhóm người dùng</h4>
+                        </div>
+                    </div>
+
+                    <div>
+                        @if (TempData["SuccessMessage"] != null)
+                        {
+                            <div class="alert alert-success alert-dismissible fade show" role="alert">
+                                @TempData["SuccessMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                        @if (TempData["FailMessage"] != null)
+                        {
+                            <div class="alert alert-danger alert-dismissible fade show" role="alert">
+                                @TempData["FailMessage"]
+                                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+                            </div>
+                        }
+
+                        @if (!Model.Any())
+                        {
+                            <div class="alert alert-info text-center" style="background-color: white; border-color: white; padding-bottom: 0px;">
+                                <i class="fa fa-database" style="font-size: 30px; margin-right: 10px;"></i>
+                                <span>Không có nhóm người dùng</span>
+                            </div>
+                        }
+                        else
+                        {
+                            <div class="table-responsive">
+                                <table class="table table-bordered table-hover" style="margin-bottom: 0px;">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="text-center">STT</th>
+                                            <th scope="col" class="text-center">Tên nhóm người dùng</th>
+                                            <th scope="col" class="text-center">Xử lý</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach (var item in Model)
+                                        {
+                                            <tr>
+                                                <td class="text-center">@(@Model.ToList().IndexOf(item) + 1)</td>
+                                                <td class="text-center">@item.UserTypeName</td>
+                                                <td class="text-center">
+                                                    <a href="@Url.Action("EditUserType", new { userTypeId = item.UserTypeId })" class="btn btn-sm" style="background-color: #3CB371; color: white; border-radius: 20px; padding: 8px 15px; margin-right: 5px;">
+                                                        <i class="fa fa-edit"></i> Sửa
+                                                    </a>
+                                                    <a href="@Url.Action("DeleteUserType", new { userTypeId = item.UserTypeId })" class="btn btn-sm" style="background-color: #d9534f; color: white; border-radius: 20px; padding: 8px 15px;" title="Delete" onclick="return confirmDelete()">
+                                                        <i class="fa fa-trash"></i> Xóa
+                                                    </a>
+                                                </td>
+                                            </tr>
+                                        }
+                                    </tbody>
+                                </table>
+                            </div>
+                        }
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+<script>
+    function confirmDelete() {
+        return confirm("Bạn có chắc chắn muốn xóa nhóm người dùng này không?");
+    }
+</script>

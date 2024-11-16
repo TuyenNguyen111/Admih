@@ -1,0 +1,167 @@
+﻿@model FinalProject.ViewModels.RegisterVM
+
+@{
+    ViewData["Title"] = "Register";
+}
+
+@{
+
+    ViewData["Title"] = "Register";
+
+    Layout = null;
+}
+
+@if (!ViewData.ModelState.IsValid)
+{
+    <div class="alert alert-danger">
+        @foreach (var error in ViewData.ModelState.Values.SelectMany(v => v.Errors))
+        {
+            <p>@error.ErrorMessage</p>
+        }
+    </div>
+}
+
+<!doctype html>
+<html lang="en">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <link rel="stylesheet" href="~/assets/css/libs.min.css">
+    <link rel="stylesheet" href="~/assets/css/socialv.css?v=4.0.0">
+    <link rel="stylesheet" href="~/assets/vendor/fortawesome/fontawesome-free/css/all.min.css">
+    <link rel="stylesheet" href="~/assets/vendor/remixicon/fonts/remixicon.css">
+    <link rel="stylesheet" href="~/assets/vendor/vanillajs-datepicker/dist/css/datepicker.min.css">
+    <link rel="stylesheet" href="~/assets/vendor/font-awesome-line-awesome/css/all.min.css">
+    <link rel="stylesheet" href="~/assets/vendor/line-awesome/dist/line-awesome/css/line-awesome.min.css">
+
+    <style>
+        .sign-in-page {
+            height: 100vh;
+            background: #005555;
+            background: #005555;
+            background: -webkit-linear-gradient(-45deg,#005555 0,#005555 100%);
+            background: -webkit-linear-gradient(315deg,#005555 0,#005555 100%);
+            background: -o-linear-gradient(315deg,#005555 0,#005555 100%);
+            background: linear-gradient(135deg,#005555 0,#005555 100%);
+            filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='rgba($primary, 80)', endColorstr='#005555', GradientType=1);
+            position: relative;
+            overflow: hidden;
+            height: 100vh;
+            width: 100%;
+            margin: 0 auto;
+            padding: 0 auto
+        }
+    </style>
+</head>
+
+<body class=" ">
+    <div class="wrapper">
+        <section class="sign-in-page">
+            <div id="container-inside">
+                <div id="circle-small"></div>
+                <div id="circle-medium"></div>
+                <div id="circle-large"></div>
+                <div id="circle-xlarge"></div>
+                <div id="circle-xxlarge"></div>
+            </div>
+            <div class="container p-0">
+                <div class="row no-gutters">
+                    <div class="col-md-6 text-center pt-5">
+                        <div class="sign-in-detail text-white">
+                            <div class="sign-slider overflow-hidden ">
+                                <p style="height: 160px" ></p>
+                                <ul class="swiper-wrapper list-inline m-0 p-0 ">
+                                    <li class="swiper-slide">
+                                        <h4 class="mb-1 text-white">Find Your Perfect Room</h4>
+                                        <p>Browse through thousands of listings to find the ideal room that fits your needs and budget.</p>
+                                    </li>
+                                    <li class="swiper-slide">
+                                        <h4 class="mb-1 text-white">Connect with Landlords</h4>
+                                        <p>Get in touch with property owners directly to inquire about availability and amenities.</p>
+                                    </li>
+                                    <li class="swiper-slide">
+                                        <h4 class="mb-1 text-white">Easy Room Booking</h4>
+                                        <p>Book room viewings or confirm rentals with just a few clicks, all from the comfort of your home.</p>
+                                    </li>
+                                </ul>
+
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-6 bg-white pt-5 pt-5 pb-lg-0 pb-5">
+                        <div class="sign-in-from">
+                            <h1 class="mb-0">Sign Up</h1>
+                            <p>Enter your email address and password to access admin panel.</p>
+                            <form class="mt-4" method="post" action="/Customer/Register" enctype="multipart/form-data">
+                                <div class="form-group">
+                                    <label class="form-label" for="name">UserName</label>
+                                    <input type="text" class="form-control mb-0" id="username" asp-for="username" placeholder="Username" required>
+                                    <span asp-validation-for="username" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="email">Email address</label>
+                                    <input type="email" class="form-control mb-0" id="email" asp-for="email" placeholder="Enter email" required>
+                                    <span asp-validation-for="email" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="password">Password</label>
+                                    <input type="password" class="form-control mb-0" id="password" asp-for="password" placeholder="Password" required>
+                                    <span asp-validation-for="password" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label" for="dob">Date of Birth</label>
+                                    <input type="date" class="form-control mb-0" id="dob" asp-for="dob" required>
+                                    <span asp-validation-for="dob" class="text-danger"></span>
+                                </div>
+
+                                <div class="form-group">
+                                    <label class="form-label">Account Type</label>
+                                    <div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" asp-for="accountType" id="tenant" value="3" required>
+                                            <label class="form-check-label" for="tenant">Tenant</label>
+                                        </div>
+                                        <div class="form-check form-check-inline">
+                                            <input class="form-check-input" type="radio" asp-for="accountType" id="landlord" value="2" required>
+                                            <label class="form-check-label" for="landlord">Landlord</label>
+                                        </div>
+                                    </div>
+                                    <span asp-validation-for="accountType" class="text-danger"></span>
+                                </div>
+
+                                <div class="d-inline-block w-100">
+                                    <div class="form-check d-inline-block mt-2 pt-1">
+                                        <input type="checkbox" class="form-check-input" id="customCheck1" name="terms" required>
+                                        <label class="form-check-label" for="customCheck1">I accept <a href="#" style="color:#005555 !important">Terms and Conditions</a></label>
+                                    </div>
+                                    <button type="submit" style="background-color: #005555 !important; border-color: #005555" class="btn btn-primary float-end">Sign Up</button>
+                                </div>
+                            </form>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </section>
+    </div>
+
+    <!-- Backend Bundle JavaScript -->
+    <script src="../assets/js/libs.min.js"></script>
+    <!-- slider JavaScript -->
+    <script src="../assets/js/slider.js"></script>
+    <!-- masonry JavaScript -->
+    <script src="../assets/js/masonry.pkgd.min.js"></script>
+    <!-- SweetAlert JavaScript -->
+    <script src="../assets/js/enchanter.js"></script>
+    <!-- SweetAlert JavaScript -->
+    <script src="../assets/js/sweetalert.js"></script>
+    <!-- app JavaScript -->
+    <script src="../assets/js/charts/weather-chart.js"></script>
+    <script src="../assets/js/app.js"></script>
+    <script src="../vendor/vanillajs-datepicker/dist/js/datepicker.min.js"></script>
+    <script src="../assets/js/lottie.js"></script>
+</body>
+</html>

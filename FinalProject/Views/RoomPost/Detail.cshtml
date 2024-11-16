@@ -1,0 +1,158 @@
+﻿@model FinalProject.ViewModels.RoomDetailAndImagesVM
+
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+
+@{
+    ViewData["Title"] = "Property Detail";
+    Layout = "~/Views/Shared/_LayoutCustomer.cshtml";
+}
+@if (TempData["SuccessMessage"] != null)
+{
+    <script type="text/javascript">
+        var successMessage = @Html.Raw(TempData["SuccessMessage"]);
+        alert(successMessage);
+        window.location.href = '@Url.Action("Detail", "RoomPost", new { id = Model.RoomDetail.PostId })';
+    </script>
+}
+@section BreadCum 
+{
+    <div class="hero page-inner overlay"
+        style="background-image: url('@Url.Content("~/images/hero_bg_3.jpg")')">
+        <div class="container">
+            <div class="row justify-content-center align-items-center">
+                <div class="col-lg-9 text-center mt-5">
+                    <h1 class="heading" style="max-width: 90%; word-wrap: break-word;" data-aos="fade-up">
+                        @Model.RoomDetail.RoomAddress
+                    </h1>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+
+<div class="section">
+    <div class="container">
+        <div class="row justify-content-between">
+            <div class="col-lg-7">
+                <div class="img-property-slide-wrap">
+                    <div class="img-property-slide">
+                        @foreach (var image in Model.RoomImages)
+                        {
+                            <img src="~/img/Room/@image.RoomImage" alt="Image" class="img-fluid" />
+                        }
+                    </div>
+                </div> 
+            </div>
+            <div class="col-lg-4">
+                <h2 class="heading text-primary">@Model.RoomDetail.RoomName</h2>
+                <p class="meta">@Model.RoomDetail.RoomAddress</p>
+                <div class="specs d-flex mb-4">
+                    <span class="d-block d-flex align-items-center me-3">
+                        <span class="fas fa-user me-2"></span>
+                        <span class="caption">@Model.RoomDetail.Quantity people</span>
+                    </span>
+                    <span class="d-block d-flex align-items-center">
+                        <span class="fas fa-ruler-horizontal me-2"></span>
+                        <span class="caption">@Model.RoomDetail.RoomSize m²</span>
+                    </span>
+                </div>
+                <div class="price mb-2"><span>@Model.RoomDetail.RoomPrice.ToString("N0") ₫</span></div>
+                <h2 class="heading text-primary">Thông Tin Mô Tả</h2>
+                <p class="text-black-50">
+                    @Model.RoomDetail.RoomDescription
+                </p>
+                <h2 class="heading text-primary">Tiện Ích</h2>
+                <p class="meta">@Model.RoomDetail.UtilityNames</p>
+                <p class="text-black-50">
+                    @Model.RoomDetail.UtilityDescriptions
+                </p>
+
+                <div class="d-block agent-box p-5">
+                    <div class="d-flex align-items-center mb-4">
+                        <div class="img me-3">
+                            @if (!string.IsNullOrEmpty(Model.RoomDetail.UserImage))
+                            {
+                                <img src="@Model.RoomDetail.UserImage"
+                                     alt="User_Image"
+                                     class="img-fluid" />
+                            }
+                            else
+                            {
+                                <img src="~/img/User/woman.jpg"
+                                     alt="User_Image"
+                                     class="img-fluid" />
+                            }
+
+                        </div>
+                        <div class="text">
+                            <h3 style="font-size: 1.5rem; font-weight: bold;" class="mb-0">@Model.RoomDetail.FullName</h3>
+                        </div>
+                    </div>
+
+                    <div class="text">
+                        <h3 class="mb-0">Thông Tin Liên Hệ</h3>
+                        <div class="meta mb-3"></div>
+                        <p>
+                            <span class="me-2">
+                                <i class="fas fa-envelope"></i>
+                            </span>
+                            @Model.RoomDetail.Email
+                        </p>
+                        <p>
+                            <span class="me-2">
+                                <i class="fas fa-phone"></i>
+                            </span>
+                            @Model.RoomDetail.Phone
+                        </p>
+                        <ul class="list-unstyled social dark-hover d-flex">
+                            <li class="me-1">
+                                <a href="#"><span class="icon-instagram"></span></a>
+                            </li>
+                            <li class="me-1">
+                                <a href="#"><span class="icon-twitter"></span></a>
+                            </li>
+                            <li class="me-1">
+                                <a href="#"><span class="icon-facebook"></span></a>
+                            </li>
+                            <li class="me-1">
+                                <a href="#"><span class="icon-linkedin"></span></a>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <h2 class="heading" style="max-width: 90%; word-wrap: break-word; color: #00204A; font-weight: bold" data-aos="fade-up">
+               Bản đồ tại vị trí @Model.RoomDetail.RoomAddress
+        </h2>
+        </br>
+        <div id="map" style="width: 100%; height: 400px;"></div>
+
+        </br>
+        </br>
+        </br>
+        </br>
+
+        <h2 class="heading" style="max-width: 90%; word-wrap: break-word; color: #00204A; font-weight: bold" data-aos="fade-up">   Danh sách các phòng trọ liên quan</h2>
+        </br>
+        @await Component.InvokeAsync("SliderPartial", new { postId = Model.RoomDetail.PostId, address = Model.RoomDetail.RoomAddress })
+
+
+    </div>
+</div>
+
+<script>
+    function initMap() {
+        const location = { lat: @Model.RoomDetail.Latitude, lng: @Model.RoomDetail.Longitude };
+        const map = new google.maps.Map(document.getElementById("map"), {
+            zoom: 14,
+            center: location,
+        });
+        new google.maps.Marker({
+            position: location,
+            map: map,
+        });
+    }
+</script>
+
+<script src="https://maps.googleapis.com/maps/api/js?key=@ViewData["GoogleMapsApiKey"]&callback=initMap" async defer></script>
